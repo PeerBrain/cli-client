@@ -1,0 +1,10 @@
+.env
+example.env
+env.txt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+keys/
+*.pem
+*.key

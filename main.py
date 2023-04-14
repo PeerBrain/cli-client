@@ -5,6 +5,7 @@ import json
 import argparse
 import os
 import webbrowser
+import time
 
 from encrypt_data import (
     generate_keypair,
@@ -39,7 +40,9 @@ from client_functions import (
     remove_user_friends,
     update_rating_for_thought,
     get_user_conversation,
-    post_conversation_message
+    post_conversation_message,
+    delete_user_profile,
+    delete_user_keys
 )
 
 from fastapi import HTTPException
@@ -194,6 +197,7 @@ def main():
                     print("7. View your messages singularly.")
                     print("8. Private conversations(DM)")
                     print("9. Enable 2FA")
+                    print("10. DELETE USER ACCOUNT")
                     print("B to return to main menu")
                     
                     sub_choice = input(">> ")
@@ -359,6 +363,24 @@ def main():
                         mfa = "https://mfa.peerbrain.net"
                         mfaurl = f"{mfa}/?token={token}&username={username}"
                         webbrowser.open(mfaurl)    
+                    elif sub_choice == "10":
+                        
+                        print("\nYou are about to delete your Peerbrain Account. \
+                            \n\nTHIS ACTION CANNOT BE UNDONE!")
+                        print("\nAre you sure you want to delete your Peerbrain Account?  \n")
+                        confirmation = input ("If so, please enter your username below. \n\n")
+                        if confirmation == username:
+                            delete_user_profile(server_url)
+                            delete_user_keys()
+                            log_out()
+                            time.sleep(1)
+                            authenticated == False
+                            print('Your account was successfully deleted! \n')
+                            time.sleep(1)
+                            print("Goodbye!\n\n")
+                            break
+                        else:
+                            break
                     elif sub_choice == "B" or sub_choice=="b":
                         print("Returning to main menu...")
                         break

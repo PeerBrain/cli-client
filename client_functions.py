@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from typing import List, Tuple, Union
+import time
 
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -134,7 +135,7 @@ def register_user(server_url:str, username:str, user_email:str, user_password:st
     return data.items()
 
 def add_user_friends(server_url:str, friend_username:str):
-    """function to return a list of all user friends."""
+    """function to add a user as a friend."""
     account_url_suffix = "api/v1/friends/"
 
     headers = {"Authorization": f"Bearer {get_token()}"}
@@ -394,4 +395,22 @@ def log_out():
     else:
         print("You are not logged in!")   
         
+def delete_user_profile(server_url:str):
+    """function to add a user as a friend."""
+    account_url_suffix = "api/v1/me/delete"
 
+    headers = {"Authorization": f"Bearer {get_token()}"}
+    
+    response = requests.get(f"{server_url}{account_url_suffix}", headers=headers, timeout=10)
+
+    data = response.json()
+    
+    return data
+
+def delete_user_keys():
+    keys = ["keys/message.key", "keys/private_key.pem", "keys/public_key.pem"]
+    for key in keys:
+        if os.path.exists(key):
+            os.remove(key)
+            print(f"{key[4:]} deleted succesfully!")
+            time.sleep(1)
